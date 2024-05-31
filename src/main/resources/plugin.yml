@@ -1,0 +1,5 @@
+name: rickroll
+version: '1.0'
+main: net.radstevee.rickroll.RickRoll
+description: Never gonna give you up, never gonna let you dow-
+api-version: '1.20'
