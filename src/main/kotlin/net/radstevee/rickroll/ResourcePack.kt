@@ -17,17 +17,12 @@ object ResourcePack {
             outputDir = File("/home/radsteve/Minecraft/MCCI 1/.minecraft/resourcepacks/rickroll")
         }
     }
-    val frames = (1..999).toList()
+    val frames = (1 .. 999).toList()
 
     private fun splitImage(frame: Int): List<Key> {
-        val inputStream =
-                RickRoll::class
-                        .java
-                        .getResource(
-                                String.format("/assets/rickroll/textures/frame%04d.png", frame)
-                        )
-                        ?.openStream()
-                        ?: error("Frame $frame not found!")
+        val inputStream = RickRoll::class.java.getResource(
+                String.format("/assets/rickroll/textures/frame%04d.png", frame)
+            )?.openStream() ?: error("Frame $frame not found!")
         val outputDir = File(pack.outputDir, "assets/rickroll/textures/frame$frame")
         val image = ImageIO.read(inputStream)
         val tileWidth = 128
@@ -43,11 +38,9 @@ object ResourcePack {
             for (x in 0 until columns) {
                 val startX = x * tileWidth
                 val startY = y * tileHeight
-                val width =
-                        if (startX + tileWidth > image.width) image.width - startX else tileWidth
-                val height =
-                        if (startY + tileHeight > image.height) image.height - startY
-                        else tileHeight
+                val width = if (startX + tileWidth > image.width) image.width - startX else tileWidth
+                val height = if (startY + tileHeight > image.height) image.height - startY
+                else tileHeight
                 val subImage = image.getSubimage(startX, startY, width, height)
                 val outputFile = File(outputDir, "tile_$partNumber.png")
                 outputFile.mkdirs()
@@ -56,7 +49,7 @@ object ResourcePack {
 
                 if (characters[frame] == null) characters[frame] = mutableListOf()
                 characters[frame]!!.add(
-                        StringEscapeUtils.unescapeJava(String.format("\\uE%03d", partNumber))
+                    StringEscapeUtils.unescapeJava(String.format("\\uE%03d", partNumber))
                 )
 
                 partNumber++
@@ -70,21 +63,18 @@ object ResourcePack {
         println("Generating fonts...")
         frames.forEach { f ->
             println("Processing frame $f")
-            pack.fonts.add(
-                    font {
-                        key = Key("rickroll", "frame$f")
-
-                        val images = splitImage(f)
-                        images.forEachIndexed { i, img ->
-                            bitmap {
-                                key = img
-                                height = 8
-                                ascent = 0
-                                chars = listOf(characters[f]!![i])
-                            }
-                        }
+            pack.fonts.add(font {
+                key = Key("rickroll", "frame$f")
+                val images = splitImage(f)
+                images.forEachIndexed { i, img ->
+                    bitmap {
+                        key = img
+                        height = 8
+                        ascent = 0
+                        chars = listOf(characters[f]!![i])
                     }
-            )
+                }
+            })
         }
         pack.save()
     }
