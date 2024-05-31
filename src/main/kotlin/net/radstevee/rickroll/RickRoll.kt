@@ -18,7 +18,6 @@ class RickRoll : JavaPlugin() {
 
                 Bukkit.getScheduler().runTaskTimer(
                     this, Runnable {
-                        var str = ""
                         val component = buildText {
                             repeat(16) { appendNewline() }
 
@@ -27,9 +26,7 @@ class RickRoll : JavaPlugin() {
                             )
                             ResourcePack.characters[currentFrame]!!.forEachIndexed { i, it ->
                                 append(it)
-                                str += it
                                 if ((i + 1) % 9 == 0) {
-                                    str += "\n"
                                     appendNewline()
                                 }
                             }
